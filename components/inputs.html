@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inputs - MiColeEnLinea Prototipos</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#EEF2FF',
+              100: '#E0E7FF',
+              500: '#6366F1',
+              600: '#4F46E5',
+            },
+            gray: {
+              50: '#F9FAFB',
+              100: '#F3F4F6',
+              200: '#E5E7EB',
+              300: '#D1D5DB',
+              400: '#9CA3AF',
+              500: '#6B7280',
+              600: '#4B5563',
+              700: '#374151',
+              800: '#1F2937',
+            },
+            error: {
+              50: '#FEF2F2',
+              500: '#EF4444',
+              600: '#DC2626',
+            },
+            success: {
+              500: '#10B981',
+            },
+          },
+          borderRadius: {
+            'xl': '16px',
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F9FAFB;
+    }
+
+    /* Input base */
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      background-color: white;
+      color: #1F2937;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .input-field::placeholder {
+      color: #9CA3AF;
+    }
+
+    .input-field:hover:not(:disabled) {
+      border-color: #D1D5DB;
+    }
+
+    .input-field:focus {
+      border-color: #6366F1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .input-field:disabled {
+      background-color: #F3F4F6;
+      color: #9CA3AF;
+      cursor: not-allowed;
+    }
+
+    .input-field.input-error {
+      border-color: #EF4444;
+    }
+
+    .input-field.input-error:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .input-field.input-success {
+      border-color: #10B981;
+    }
+
+    /* Textarea */
+    .textarea-field {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Select */
+    .select-field {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 40px;
+    }
+
+    /* Input with icon */
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9CA3AF;
+      pointer-events: none;
+    }
+
+    .input-icon-right {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9CA3AF;
+    }
+
+    .input-with-icon-left {
+      padding-left: 44px;
+    }
+
+    .input-with-icon-right {
+      padding-right: 44px;
+    }
+
+    /* Character counter */
+    .char-counter {
+      font-size: 12px;
+      color: #9CA3AF;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .char-counter.warning {
+      color: #F59E0B;
+    }
+
+    .char-counter.error {
+      color: #EF4444;
+    }
+  </style>
+</head>
+<body class="p-8">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Inputs</h1>
+    <p class="text-gray-600 mb-8">Campos de texto con estados, validacion y variantes.</p>
+
+    <!-- Input basico -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Input Basico</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+          <input type="text" class="input-field" placeholder="Ej: Juan Perez">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input type="email" class="input-field" placeholder="correo@ejemplo.com">
+          <p class="text-xs text-gray-500 mt-1">Este sera tu usuario para ingresar</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estados -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Estados</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-6">
+
+        <!-- Normal -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Normal</label>
+          <input type="text" class="input-field" value="Texto ingresado">
+        </div>
+
+        <!-- Focus (solo visual, clic para ver) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Focus (clic para ver)</label>
+          <input type="text" class="input-field" placeholder="Haz clic aqui...">
+        </div>
+
+        <!-- Error -->
+        <div>
+          <label class="block text-sm font-medium text-error-600 mb-1">Con error</label>
+          <input type="text" class="input-field input-error" value="email-invalido">
+          <p class="text-sm text-error-500 mt-1 flex items-center gap-1">
+            <i data-feather="alert-circle" class="w-4 h-4"></i>
+            <span>Ingresa un email valido</span>
+          </p>
+        </div>
+
+        <!-- Success -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Validado</label>
+          <input type="text" class="input-field input-success" value="juan@ejemplo.com">
+          <p class="text-sm text-success-500 mt-1 flex items-center gap-1">
+            <i data-feather="check-circle" class="w-4 h-4"></i>
+            <span>Email disponible</span>
+          </p>
+        </div>
+
+        <!-- Disabled -->
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-1">Deshabilitado</label>
+          <input type="text" class="input-field" value="No editable" disabled>
+          <p class="text-xs text-gray-400 mt-1">Contacta al colegio para modificar este campo</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Con iconos -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Con Iconos</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-6">
+
+        <!-- Icono izquierda -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+          <div class="input-wrapper">
+            <i data-feather="search" class="input-icon-left w-5 h-5"></i>
+            <input type="text" class="input-field input-with-icon-left" placeholder="Buscar alumno...">
+          </div>
+        </div>
+
+        <!-- Icono derecha (email) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <div class="input-wrapper">
+            <input type="email" class="input-field input-with-icon-right" placeholder="correo@ejemplo.com">
+            <i data-feather="mail" class="input-icon-right w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Password con toggle -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contrasena</label>
+          <div class="input-wrapper">
+            <input type="password" id="password-input" class="input-field input-with-icon-right" placeholder="********" value="micontrasena">
+            <button class="input-icon-right cursor-pointer hover:text-gray-600" onclick="togglePassword()" aria-label="Mostrar contrasena">
+              <i data-feather="eye" id="eye-icon" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Con contador de caracteres -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Con Contador de Caracteres</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-6">
+
+        <!-- Normal -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del curso</label>
+          <input type="text" class="input-field" maxlength="100" oninput="updateCounter(this, 'counter1')" placeholder="Ej: 3ro A - Turno Manana">
+          <p class="char-counter" id="counter1">0 / 100</p>
+        </div>
+
+        <!-- Advertencia -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Descripcion breve</label>
+          <input type="text" class="input-field" maxlength="50" value="Esta es una descripcion que se acerca al lim" oninput="updateCounter(this, 'counter2')">
+          <p class="char-counter warning" id="counter2">45 / 50</p>
+        </div>
+
+        <!-- Limite alcanzado -->
+        <div>
+          <label class="block text-sm font-medium text-error-600 mb-1">Titulo (limite alcanzado)</label>
+          <input type="text" class="input-field input-error" maxlength="30" value="Este titulo es muy largo y no" oninput="updateCounter(this, 'counter3')">
+          <p class="char-counter error" id="counter3">30 / 30</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Textarea -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Textarea</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-6">
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
+          <textarea class="input-field textarea-field" placeholder="Escribe tu mensaje aqui..." oninput="updateCounter(this, 'textarea-counter')"></textarea>
+          <p class="char-counter" id="textarea-counter">0 / 500</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Notas para profesores</label>
+          <textarea class="input-field textarea-field" placeholder="Ej: Alergias, medicacion, necesidades especiales..." style="min-height: 120px;"></textarea>
+          <p class="text-xs text-gray-500 mt-1">Esta informacion solo es visible para el staff del colegio</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Select -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Select</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-6">
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Curso</label>
+          <select class="input-field select-field">
+            <option value="" disabled selected>Selecciona un curso</option>
+            <option value="1">1ro A - Turno Manana</option>
+            <option value="2">1ro B - Turno Tarde</option>
+            <option value="3">2do A - Turno Manana</option>
+            <option value="4">2do B - Turno Tarde</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Provincia</label>
+          <select class="input-field select-field">
+            <option value="" disabled selected>Selecciona una provincia</option>
+            <option value="1">Buenos Aires</option>
+            <option value="2">CABA</option>
+            <option value="3">Cordoba</option>
+            <option value="4">Santa Fe</option>
+            <option value="5">Mendoza</option>
+          </select>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Checkbox y Radio -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Checkbox y Radio</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm space-y-6">
+
+        <!-- Checkboxes -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Tipos de notificacion</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-primary-500 focus:ring-primary-500">
+              <span class="text-gray-700">Personales</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-primary-500 focus:ring-primary-500">
+              <span class="text-gray-700">Del curso</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-primary-500 focus:ring-primary-500">
+              <span class="text-gray-700">Institucionales</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Radios -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Tipo de destinatario</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="radio" name="recipient-type" value="all" checked class="w-5 h-5 border-gray-300 text-primary-500 focus:ring-primary-500">
+              <span class="text-gray-700">Toda la escuela</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="radio" name="recipient-type" value="course" class="w-5 h-5 border-gray-300 text-primary-500 focus:ring-primary-500">
+              <span class="text-gray-700">Por curso</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="radio" name="recipient-type" value="individual" class="w-5 h-5 border-gray-300 text-primary-500 focus:ring-primary-500">
+              <span class="text-gray-700">Individual</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Formulario completo de ejemplo -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Ejemplo: Formulario de Alumno</h2>
+      <div class="bg-white p-6 rounded-2xl shadow-sm">
+        <form class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+              <input type="text" class="input-field" placeholder="Juan" required>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Apellido *</label>
+              <input type="text" class="input-field" placeholder="Perez" required>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">DNI *</label>
+            <input type="text" class="input-field" placeholder="XX.XXX.XXX" required>
+            <p class="text-xs text-gray-500 mt-1">Formato: XX.XXX.XXX (con puntos)</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de nacimiento *</label>
+            <input type="date" class="input-field" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Curso *</label>
+            <select class="input-field select-field" required>
+              <option value="" disabled selected>Selecciona un curso</option>
+              <option value="1">1ro A - Turno Manana</option>
+              <option value="2">2do B - Turno Tarde</option>
+            </select>
+          </div>
+
+          <div class="flex gap-3 justify-end pt-4">
+            <button type="button" class="px-6 py-3 text-gray-600 font-semibold rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+              Cancelar
+            </button>
+            <button type="submit" class="px-6 py-3 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-colors">
+              Guardar alumno
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    feather.replace();
+
+    function togglePassword() {
+      const input = document.getElementById('password-input');
+      const icon = document.getElementById('eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-feather', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-feather', 'eye');
+      }
+      feather.replace();
+    }
+
+    function updateCounter(input, counterId) {
+      const counter = document.getElementById(counterId);
+      const max = input.maxLength || 500;
+      const current = input.value.length;
+      counter.textContent = `${current} / ${max}`;
+
+      // Update styling based on proximity to limit
+      counter.classList.remove('warning', 'error');
+      if (current >= max) {
+        counter.classList.add('error');
+      } else if (current >= max * 0.9) {
+        counter.classList.add('warning');
+      }
+    }
+  </script>
+</body>
+</html>

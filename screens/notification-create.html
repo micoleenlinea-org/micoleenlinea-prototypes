@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo Mensaje - MiColeEnLinea</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: { 50: '#EEF2FF', 100: '#E0E7FF', 500: '#6366F1', 600: '#4F46E5' },
+            gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937' },
+            success: { 50: '#ECFDF5', 500: '#10B981' },
+          },
+          borderRadius: { 'xl': '16px', '2xl': '20px' },
+          boxShadow: { 'soft': '0 2px 16px rgba(0, 0, 0, 0.06)', 'card': '0 4px 24px rgba(0, 0, 0, 0.08)' },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F9FAFB;
+    }
+
+    /* Steps */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .step.active .step-number {
+      background-color: #6366F1;
+      color: white;
+    }
+
+    .step.completed .step-number {
+      background-color: #10B981;
+      color: white;
+    }
+
+    .step.inactive .step-number {
+      background-color: #E5E7EB;
+      color: #9CA3AF;
+    }
+
+    .step-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .step.active .step-label { color: #374151; }
+    .step.completed .step-label { color: #10B981; }
+    .step.inactive .step-label { color: #9CA3AF; }
+
+    .step-connector {
+      width: 40px;
+      height: 2px;
+      background-color: #E5E7EB;
+    }
+
+    .step-connector.completed {
+      background-color: #10B981;
+    }
+
+    /* Radio cards */
+    .radio-card {
+      background: white;
+      border: 2px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .radio-card:hover {
+      border-color: #D1D5DB;
+    }
+
+    .radio-card.selected {
+      border-color: #6366F1;
+      background: linear-gradient(to bottom right, #EEF2FF, white);
+    }
+
+    .radio-card .radio-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    /* Template card */
+    .template-card {
+      background: white;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .template-card:hover {
+      border-color: #6366F1;
+      background-color: #FAFBFF;
+    }
+
+    .template-card.selected {
+      border-color: #6366F1;
+      background-color: #EEF2FF;
+    }
+
+    /* Input */
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      background-color: white;
+      color: #1F2937;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: #6366F1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .textarea-field {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    /* Preview card */
+    .preview-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .preview-header {
+      background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      padding: 16px 20px;
+      color: white;
+    }
+
+    /* Variable tag */
+    .variable-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      background-color: #EEF2FF;
+      border: 1px solid #C7D2FE;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: monospace;
+      color: #4F46E5;
+      cursor: pointer;
+    }
+
+    .variable-tag:hover {
+      background-color: #E0E7FF;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+  <div class="max-w-3xl mx-auto">
+
+    <!-- Header -->
+    <header class="text-center mb-8">
+      <h1 class="text-2xl font-bold text-gray-800">Nuevo mensaje</h1>
+      <p class="text-gray-500 mt-1">Crea y envia un mensaje a tus destinatarios</p>
+    </header>
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step completed">
+        <div class="step-number">
+          <i data-feather="check" class="w-4 h-4"></i>
+        </div>
+        <span class="step-label hidden sm:inline">Destinatarios</span>
+      </div>
+      <div class="step-connector completed"></div>
+      <div class="step active">
+        <div class="step-number">2</div>
+        <span class="step-label hidden sm:inline">Mensaje</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step inactive">
+        <div class="step-number">3</div>
+        <span class="step-label hidden sm:inline">Confirmar</span>
+      </div>
+    </div>
+
+    <!-- Step 2: Message -->
+    <div class="bg-white rounded-2xl shadow-soft p-6">
+
+      <!-- Template selection -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-3">Como quieres escribir el mensaje?</label>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <div class="radio-card" onclick="selectOption('scratch', this)">
+            <div class="radio-icon bg-gray-100">
+              <i data-feather="edit-3" class="w-6 h-6 text-gray-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800">Escribir desde cero</h3>
+            <p class="text-sm text-gray-500 mt-1">Redacta tu mensaje personalizado</p>
+          </div>
+
+          <div class="radio-card selected" onclick="selectOption('template', this)">
+            <div class="radio-icon bg-primary-50">
+              <i data-feather="file-text" class="w-6 h-6 text-primary-500"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800">Usar plantilla</h3>
+            <p class="text-sm text-gray-500 mt-1">Elige una plantilla predefinida</p>
+          </div>
+        </div>
+
+        <!-- Templates list (visible when "usar plantilla" selected) -->
+        <div id="templates-section">
+          <p class="text-sm text-gray-500 mb-3">Elige una plantilla:</p>
+
+          <div class="space-y-2 mb-4">
+            <!-- System templates -->
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Del sistema</div>
+
+            <div class="template-card selected" onclick="selectTemplate(this, 'Reunion de padres', 'Estimadas familias de {CURSO}, los invitamos a la reunion de padres que se realizara el dia {FECHA} a las...')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <i data-feather="users" class="w-5 h-5 text-gray-400"></i>
+                  <span class="font-medium text-gray-800">Reunion de padres</span>
+                </div>
+                <i data-feather="check-circle" class="w-5 h-5 text-primary-500"></i>
+              </div>
+            </div>
+
+            <div class="template-card" onclick="selectTemplate(this, 'Suspension de clases', 'Estimadas familias, les informamos que el dia {FECHA} las clases quedaran suspendidas debido a...')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <i data-feather="alert-circle" class="w-5 h-5 text-gray-400"></i>
+                  <span class="font-medium text-gray-800">Suspension de clases</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="template-card" onclick="selectTemplate(this, 'Recordatorio de cuota', 'Estimada familia, les recordamos que la cuota del mes de {MES} vence el dia {FECHA}...')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <i data-feather="credit-card" class="w-5 h-5 text-gray-400"></i>
+                  <span class="font-medium text-gray-800">Recordatorio de cuota</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Custom templates -->
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2">Mis plantillas</div>
+
+            <div class="template-card" onclick="selectTemplate(this, 'Comunicado mensual', 'Queridas familias de {CURSO}, compartimos el resumen del mes...')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <i data-feather="file" class="w-5 h-5 text-gray-400"></i>
+                  <span class="font-medium text-gray-800">Comunicado mensual</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a href="#" class="text-sm text-primary-600 hover:underline flex items-center gap-1">
+            <i data-feather="plus" class="w-4 h-4"></i>
+            <span>Crear nueva plantilla</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Message form -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Asunto</label>
+          <input type="text" class="input-field" id="subject-input" value="Convocatoria a reunion - {CURSO}" placeholder="Asunto del mensaje">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Mensaje</label>
+          <textarea class="input-field textarea-field" id="message-input" placeholder="Escribe tu mensaje aqui...">Estimadas familias de {CURSO},
+
+Los invitamos a la reunion de padres que se realizara el dia {FECHA} a las 18:00hs en el salon de actos de la escuela.
+
+Es muy importante su asistencia para tratar temas relevantes del ciclo lectivo.
+
+Saludos cordiales,
+{COLEGIO}</textarea>
+        </div>
+
+        <!-- Variables helper -->
+        <div class="p-4 bg-primary-50 rounded-xl">
+          <p class="text-sm text-primary-700 font-medium mb-2">Variables disponibles:</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="variable-tag" onclick="insertVariable('{CURSO}')">{CURSO}</span>
+            <span class="variable-tag" onclick="insertVariable('{FECHA}')">{FECHA}</span>
+            <span class="variable-tag" onclick="insertVariable('{COLEGIO}')">{COLEGIO}</span>
+            <span class="variable-tag" onclick="insertVariable('{ALUMNO}')">{ALUMNO}</span>
+          </div>
+          <p class="text-xs text-primary-600 mt-2">Haz clic en una variable para insertarla en el mensaje</p>
+        </div>
+
+        <!-- Attachments -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Adjuntos (opcional)</label>
+          <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-gray-300 transition-colors cursor-pointer">
+            <i data-feather="upload-cloud" class="w-8 h-8 text-gray-400 mx-auto mb-2"></i>
+            <p class="text-sm text-gray-600">Arrastra archivos aqui o <span class="text-primary-600">selecciona</span></p>
+            <p class="text-xs text-gray-400 mt-1">PDF, imagenes o documentos (max 10MB)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-between mt-8 pt-6 border-t border-gray-100">
+        <button class="px-6 py-3 text-gray-600 font-semibold hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2">
+          <i data-feather="arrow-left" class="w-4 h-4"></i>
+          <span>Volver</span>
+        </button>
+        <button class="px-6 py-3 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-colors flex items-center gap-2">
+          <span>Continuar</span>
+          <i data-feather="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Preview panel (collapsed by default) -->
+    <details class="mt-6">
+      <summary class="cursor-pointer text-sm text-primary-600 hover:underline flex items-center gap-1">
+        <i data-feather="eye" class="w-4 h-4"></i>
+        <span>Vista previa del mensaje</span>
+      </summary>
+
+      <div class="preview-card mt-4">
+        <div class="preview-header">
+          <div class="flex items-center gap-2 text-sm opacity-75 mb-1">
+            <i data-feather="bell" class="w-4 h-4"></i>
+            <span>Escuela San Martin</span>
+          </div>
+          <h3 class="font-semibold text-lg">Convocatoria a reunion - 3ro A</h3>
+        </div>
+        <div class="p-5">
+          <p class="text-gray-600 whitespace-pre-line">Estimadas familias de 3ro A,
+
+Los invitamos a la reunion de padres que se realizara el dia 15 de marzo a las 18:00hs en el salon de actos de la escuela.
+
+Es muy importante su asistencia para tratar temas relevantes del ciclo lectivo.
+
+Saludos cordiales,
+Escuela San Martin</p>
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <script>
+    feather.replace();
+
+    function selectOption(option, element) {
+      document.querySelectorAll('.radio-card').forEach(card => card.classList.remove('selected'));
+      element.classList.add('selected');
+
+      const templatesSection = document.getElementById('templates-section');
+      if (option === 'template') {
+        templatesSection.style.display = 'block';
+      } else {
+        templatesSection.style.display = 'none';
+        document.getElementById('subject-input').value = '';
+        document.getElementById('message-input').value = '';
+      }
+    }
+
+    function selectTemplate(element, subject, body) {
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected');
+        const checkIcon = card.querySelector('[data-feather="check-circle"]');
+        if (checkIcon) checkIcon.remove();
+      });
+
+      element.classList.add('selected');
+
+      // Add check icon
+      const checkIcon = document.createElement('i');
+      checkIcon.setAttribute('data-feather', 'check-circle');
+      checkIcon.className = 'w-5 h-5 text-primary-500';
+      element.querySelector('.flex').appendChild(checkIcon);
+      feather.replace();
+
+      // Fill form
+      document.getElementById('subject-input').value = subject;
+      document.getElementById('message-input').value = body;
+    }
+
+    function insertVariable(variable) {
+      const textarea = document.getElementById('message-input');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      textarea.value = text.substring(0, start) + variable + text.substring(end);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+    }
+  </script>
+</body>
+</html>

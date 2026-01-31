@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cards - MiColeEnLinea Prototipos</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#EEF2FF',
+              100: '#E0E7FF',
+              500: '#6366F1',
+              600: '#4F46E5',
+            },
+            gray: {
+              50: '#F9FAFB',
+              100: '#F3F4F6',
+              200: '#E5E7EB',
+              300: '#D1D5DB',
+              400: '#9CA3AF',
+              500: '#6B7280',
+              600: '#4B5563',
+              700: '#374151',
+              800: '#1F2937',
+            },
+            badge: {
+              personal: { bg: '#FEF3C7', text: '#92400E' },
+              course: { bg: '#DBEAFE', text: '#1E40AF' },
+              institutional: { bg: '#D1FAE5', text: '#065F46' },
+            },
+            success: { 50: '#ECFDF5', 500: '#10B981' },
+            warning: { 50: '#FFFBEB', 500: '#F59E0B' },
+            error: { 50: '#FEF2F2', 500: '#EF4444' },
+          },
+          borderRadius: {
+            'xl': '16px',
+            '2xl': '20px',
+          },
+          boxShadow: {
+            'soft': '0 2px 16px rgba(0, 0, 0, 0.06)',
+            'card': '0 4px 24px rgba(0, 0, 0, 0.08)',
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F9FAFB;
+    }
+
+    /* Card base */
+    .card {
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease;
+    }
+
+    .card-clickable:hover {
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .card-clickable {
+      cursor: pointer;
+    }
+
+    /* Notification card */
+    .notification-card {
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .notification-card.unread {
+      background: linear-gradient(to right, #EEF2FF 0%, white 100%);
+    }
+
+    .notification-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #6366F1;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-personal { background-color: #FEF3C7; color: #92400E; }
+    .badge-course { background-color: #DBEAFE; color: #1E40AF; }
+    .badge-institutional { background-color: #D1FAE5; color: #065F46; }
+
+    /* Stat card */
+    .stat-card {
+      padding: 20px;
+    }
+
+    .stat-card .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-card .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-card .stat-label {
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    .stat-card .stat-change {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-change.positive { color: #10B981; }
+    .stat-change.negative { color: #EF4444; }
+  </style>
+</head>
+<body class="p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Cards</h1>
+    <p class="text-gray-600 mb-8">Tarjetas para diferentes tipos de contenido.</p>
+
+    <!-- Notification Cards -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Notification Cards</h2>
+      <div class="space-y-3">
+
+        <!-- Unread - Personal -->
+        <div class="card card-clickable notification-card unread">
+          <div class="notification-indicator"></div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="badge badge-personal">Personal</span>
+              <span class="text-xs text-gray-400">hace 5 min</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 truncate">Reunion de padres - Lucas</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">
+              Estimada familia, les recordamos que la reunion de padres sera el proximo viernes 15 de marzo a las 18:00hs.
+            </p>
+          </div>
+          <div class="flex-shrink-0 text-gray-400">
+            <i data-feather="chevron-right" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Unread - Course -->
+        <div class="card card-clickable notification-card unread">
+          <div class="notification-indicator"></div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="badge badge-course">3ro A</span>
+              <span class="text-xs text-gray-400">hace 2 horas</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 truncate">Tarea de matematicas</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">
+              Para el lunes traer resueltos los ejercicios 1 al 10 de la pagina 45 del libro.
+            </p>
+          </div>
+          <div class="flex-shrink-0 text-gray-400">
+            <i data-feather="chevron-right" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Read - Institutional -->
+        <div class="card card-clickable notification-card">
+          <div class="w-2"></div> <!-- Spacer para alinear con unread -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="badge badge-institutional">Escuela</span>
+              <span class="text-xs text-gray-400">ayer</span>
+            </div>
+            <h3 class="font-medium text-gray-700 truncate">Horario de clases actualizado</h3>
+            <p class="text-sm text-gray-500 line-clamp-2">
+              Informamos que a partir del lunes 18 el horario de entrada sera a las 7:45hs.
+            </p>
+          </div>
+          <div class="flex-shrink-0 text-gray-400">
+            <i data-feather="chevron-right" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- Read - with attachment indicator -->
+        <div class="card card-clickable notification-card">
+          <div class="w-2"></div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="badge badge-course">2do B</span>
+              <span class="text-xs text-gray-400">hace 3 dias</span>
+            </div>
+            <h3 class="font-medium text-gray-700 truncate">Material de estudio adjunto</h3>
+            <p class="text-sm text-gray-500 line-clamp-2">
+              Se adjunta el material de lectura para la proxima clase de ciencias naturales.
+            </p>
+            <div class="flex items-center gap-1 mt-2 text-xs text-gray-400">
+              <i data-feather="paperclip" class="w-3 h-3"></i>
+              <span>2 archivos adjuntos</span>
+            </div>
+          </div>
+          <div class="flex-shrink-0 text-gray-400">
+            <i data-feather="chevron-right" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Stat Cards -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Stat Cards (Dashboard)</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <div class="card stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="stat-icon bg-primary-50">
+              <i data-feather="users" class="w-6 h-6 text-primary-500"></i>
+            </div>
+            <div class="stat-change positive">
+              <i data-feather="trending-up" class="w-3 h-3"></i>
+              <span>+12%</span>
+            </div>
+          </div>
+          <div class="stat-value text-gray-800">1,234</div>
+          <div class="stat-label">Alumnos activos</div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="stat-icon" style="background-color: #D1FAE5;">
+              <i data-feather="book-open" class="w-6 h-6 text-success-500"></i>
+            </div>
+          </div>
+          <div class="stat-value text-gray-800">48</div>
+          <div class="stat-label">Cursos</div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="stat-icon" style="background-color: #DBEAFE;">
+              <i data-feather="user-check" class="w-6 h-6" style="color: #3B82F6;"></i>
+            </div>
+          </div>
+          <div class="stat-value text-gray-800">86</div>
+          <div class="stat-label">Staff</div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="flex items-start justify-between mb-3">
+            <div class="stat-icon" style="background-color: #FEF3C7;">
+              <i data-feather="bell" class="w-6 h-6 text-warning-500"></i>
+            </div>
+            <div class="stat-change negative">
+              <i data-feather="trending-down" class="w-3 h-3"></i>
+              <span>-5%</span>
+            </div>
+          </div>
+          <div class="stat-value text-gray-800">23</div>
+          <div class="stat-label">Sin leer (global)</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Student Card -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Student Cards</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="card card-clickable p-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center">
+              <span class="text-primary-600 font-semibold text-lg">LP</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-800">Lucas Perez</h3>
+              <p class="text-sm text-gray-500">DNI: 45.678.901</p>
+            </div>
+            <span class="badge badge-course">3ro A</span>
+          </div>
+        </div>
+
+        <div class="card card-clickable p-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+              <span class="text-green-600 font-semibold text-lg">SP</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-800">Sofia Perez</h3>
+              <p class="text-sm text-gray-500">DNI: 50.123.456</p>
+            </div>
+            <span class="badge badge-course">1ro B</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Course Card -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Course Cards</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div class="card card-clickable p-5">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+              <i data-feather="book" class="w-6 h-6 text-blue-600"></i>
+            </div>
+            <button class="p-2 rounded-lg hover:bg-gray-100 text-gray-400" aria-label="Opciones">
+              <i data-feather="more-vertical" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <h3 class="font-semibold text-gray-800">3ro A - Turno Manana</h3>
+          <p class="text-sm text-gray-500 mt-1">28 alumnos</p>
+        </div>
+
+        <div class="card card-clickable p-5">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+              <i data-feather="book" class="w-6 h-6 text-purple-600"></i>
+            </div>
+            <button class="p-2 rounded-lg hover:bg-gray-100 text-gray-400" aria-label="Opciones">
+              <i data-feather="more-vertical" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <h3 class="font-semibold text-gray-800">2do B - Turno Tarde</h3>
+          <p class="text-sm text-gray-500 mt-1">24 alumnos</p>
+        </div>
+
+        <div class="card card-clickable p-5">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+              <i data-feather="book" class="w-6 h-6 text-amber-600"></i>
+            </div>
+            <button class="p-2 rounded-lg hover:bg-gray-100 text-gray-400" aria-label="Opciones">
+              <i data-feather="more-vertical" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <h3 class="font-semibold text-gray-800">1ro A - Turno Manana</h3>
+          <p class="text-sm text-gray-500 mt-1">30 alumnos</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Info Card -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Info Cards</h2>
+      <div class="space-y-4">
+
+        <!-- Success -->
+        <div class="card p-4 border-l-4" style="border-left-color: #10B981; background-color: #ECFDF5;">
+          <div class="flex items-start gap-3">
+            <i data-feather="check-circle" class="w-5 h-5 text-success-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <h4 class="font-semibold text-success-500">Notificacion enviada</h4>
+              <p class="text-sm text-gray-600 mt-1">Se envio correctamente a 156 destinatarios.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="card p-4 border-l-4" style="border-left-color: #F59E0B; background-color: #FFFBEB;">
+          <div class="flex items-start gap-3">
+            <i data-feather="alert-triangle" class="w-5 h-5 text-warning-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <h4 class="font-semibold text-warning-500">Email no configurado</h4>
+              <p class="text-sm text-gray-600 mt-1">El colegio no tiene email configurado. Las notificaciones solo se enviaran por push.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div class="card p-4 border-l-4" style="border-left-color: #EF4444; background-color: #FEF2F2;">
+          <div class="flex items-start gap-3">
+            <i data-feather="x-circle" class="w-5 h-5 text-error-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <h4 class="font-semibold text-error-500">Error al importar</h4>
+              <p class="text-sm text-gray-600 mt-1">3 filas tienen errores de validacion. Revisa el archivo y vuelve a intentar.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="card p-4 border-l-4" style="border-left-color: #6366F1; background-color: #EEF2FF;">
+          <div class="flex items-start gap-3">
+            <i data-feather="info" class="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <h4 class="font-semibold text-primary-500">Tip</h4>
+              <p class="text-sm text-gray-600 mt-1">Puedes importar multiples alumnos usando un archivo CSV. <a href="#" class="text-primary-500 hover:underline">Ver formato</a></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Empty State Card -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Empty State</h2>
+      <div class="card p-12 text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+          <i data-feather="inbox" class="w-8 h-8 text-gray-400"></i>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">Sin notificaciones</h3>
+        <p class="text-sm text-gray-500 mb-6">Cuando recibas mensajes del colegio apareceran aqui.</p>
+        <button class="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors">
+          <i data-feather="refresh-cw" class="w-4 h-4"></i>
+          <span>Actualizar</span>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

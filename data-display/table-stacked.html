@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Stacked (Responsive) - MiColeEnLinea Prototipos</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: { 50: '#EEF2FF', 100: '#E0E7FF', 500: '#6366F1', 600: '#4F46E5' },
+            gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937' },
+            success: { 50: '#ECFDF5', 500: '#10B981' },
+            warning: { 50: '#FFFBEB', 500: '#F59E0B' },
+            error: { 50: '#FEF2F2', 500: '#EF4444' },
+          },
+          borderRadius: { 'xl': '16px', '2xl': '20px' },
+          boxShadow: { 'soft': '0 2px 16px rgba(0, 0, 0, 0.06)' },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F9FAFB;
+    }
+
+    /* Table base */
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .data-table th {
+      background-color: #F9FAFB;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6B7280;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .data-table td {
+      padding: 16px;
+      border-bottom: 1px solid #F3F4F6;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .data-table tbody tr:hover {
+      background-color: #F9FAFB;
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Sortable headers */
+    .sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .sortable:hover {
+      color: #374151;
+    }
+
+    /* Stacked card (mobile) */
+    .stacked-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .stacked-card .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .stacked-card .card-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-top: 1px solid #F3F4F6;
+      font-size: 14px;
+    }
+
+    .stacked-card .card-row:first-of-type {
+      border-top: none;
+    }
+
+    .stacked-card .card-label {
+      color: #6B7280;
+      font-weight: 500;
+    }
+
+    .stacked-card .card-value {
+      color: #374151;
+      text-align: right;
+    }
+
+    .stacked-card .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #F3F4F6;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-course { background-color: #DBEAFE; color: #1E40AF; }
+    .badge-active { background-color: #D1FAE5; color: #065F46; }
+    .badge-inactive { background-color: #FEE2E2; color: #DC2626; }
+
+    /* Action buttons */
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      color: #6B7280;
+      transition: all 0.15s ease;
+    }
+
+    .action-btn:hover {
+      background-color: #F3F4F6;
+      color: #374151;
+    }
+
+    .action-btn.danger:hover {
+      background-color: #FEF2F2;
+      color: #DC2626;
+    }
+
+    /* Responsive: hide table on mobile, show cards */
+    @media (max-width: 768px) {
+      .desktop-table { display: none; }
+      .mobile-cards { display: block; }
+    }
+
+    @media (min-width: 769px) {
+      .desktop-table { display: block; }
+      .mobile-cards { display: none; }
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Table Stacked (Responsive)</h1>
+    <p class="text-gray-600 mb-4">En desktop muestra tabla, en mobile muestra cards apiladas.</p>
+    <p class="text-sm text-gray-500 mb-8">Redimensiona la ventana del navegador para ver el cambio.</p>
+
+    <!-- Search and filters -->
+    <div class="bg-white rounded-2xl shadow-soft p-4 mb-4">
+      <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div class="relative flex-1 max-w-md">
+          <i data-feather="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+          <input type="text" placeholder="Buscar alumno..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none">
+        </div>
+        <div class="flex gap-3 w-full md:w-auto">
+          <select class="px-4 py-2.5 border border-gray-200 rounded-xl bg-white text-gray-700 focus:border-primary-500 outline-none flex-1 md:flex-none">
+            <option value="">Todos los cursos</option>
+            <option value="1">3ro A</option>
+            <option value="2">3ro B</option>
+            <option value="3">2do A</option>
+          </select>
+          <button class="px-4 py-2.5 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-colors flex items-center gap-2">
+            <i data-feather="plus" class="w-5 h-5"></i>
+            <span class="hidden md:inline">Agregar alumno</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop: Table view -->
+    <div class="bg-white rounded-2xl shadow-soft overflow-hidden desktop-table">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="sortable">
+              <div class="flex items-center gap-1">
+                Nombre
+                <i data-feather="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </th>
+            <th>DNI</th>
+            <th class="sortable">
+              <div class="flex items-center gap-1">
+                Curso
+                <i data-feather="chevrons-up-down" class="w-4 h-4"></i>
+              </div>
+            </th>
+            <th>Fecha Nac.</th>
+            <th>Contactos</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-primary-100 flex items-center justify-center">
+                  <span class="text-primary-600 font-semibold text-sm">LP</span>
+                </div>
+                <span class="font-medium text-gray-800">Lucas Perez</span>
+              </div>
+            </td>
+            <td>45.678.901</td>
+            <td><span class="badge badge-course">3ro A</span></td>
+            <td>15/03/2015</td>
+            <td>
+              <span class="text-sm text-gray-500">2 contactos</span>
+            </td>
+            <td>
+              <div class="flex justify-end gap-1">
+                <button class="action-btn" title="Ver detalles">
+                  <i data-feather="eye" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn" title="Editar">
+                  <i data-feather="edit-2" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn danger" title="Eliminar">
+                  <i data-feather="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
+                  <span class="text-green-600 font-semibold text-sm">SP</span>
+                </div>
+                <span class="font-medium text-gray-800">Sofia Perez</span>
+              </div>
+            </td>
+            <td>50.123.456</td>
+            <td><span class="badge badge-course">1ro B</span></td>
+            <td>22/07/2018</td>
+            <td>
+              <span class="text-sm text-gray-500">1 contacto</span>
+            </td>
+            <td>
+              <div class="flex justify-end gap-1">
+                <button class="action-btn" title="Ver detalles">
+                  <i data-feather="eye" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn" title="Editar">
+                  <i data-feather="edit-2" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn danger" title="Eliminar">
+                  <i data-feather="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center">
+                  <span class="text-amber-600 font-semibold text-sm">MG</span>
+                </div>
+                <span class="font-medium text-gray-800">Martin Garcia</span>
+              </div>
+            </td>
+            <td>48.234.567</td>
+            <td><span class="badge badge-course">3ro A</span></td>
+            <td>08/11/2015</td>
+            <td>
+              <span class="text-sm text-gray-500">2 contactos</span>
+            </td>
+            <td>
+              <div class="flex justify-end gap-1">
+                <button class="action-btn" title="Ver detalles">
+                  <i data-feather="eye" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn" title="Editar">
+                  <i data-feather="edit-2" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn danger" title="Eliminar">
+                  <i data-feather="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center">
+                  <span class="text-purple-600 font-semibold text-sm">VL</span>
+                </div>
+                <span class="font-medium text-gray-800">Valentina Lopez</span>
+              </div>
+            </td>
+            <td>49.876.543</td>
+            <td><span class="badge badge-course">2do A</span></td>
+            <td>30/01/2017</td>
+            <td>
+              <span class="text-sm text-gray-500">1 contacto</span>
+            </td>
+            <td>
+              <div class="flex justify-end gap-1">
+                <button class="action-btn" title="Ver detalles">
+                  <i data-feather="eye" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn" title="Editar">
+                  <i data-feather="edit-2" class="w-4 h-4"></i>
+                </button>
+                <button class="action-btn danger" title="Eliminar">
+                  <i data-feather="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+        <div class="text-sm text-gray-500">
+          Mostrando 1-4 de 128 alumnos
+        </div>
+        <div class="flex gap-1">
+          <button class="px-3 py-1.5 rounded-lg text-gray-500 hover:bg-gray-100" disabled>
+            <i data-feather="chevron-left" class="w-4 h-4"></i>
+          </button>
+          <button class="px-3 py-1.5 rounded-lg bg-primary-500 text-white font-medium">1</button>
+          <button class="px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100">2</button>
+          <button class="px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100">3</button>
+          <span class="px-2 py-1.5 text-gray-400">...</span>
+          <button class="px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100">32</button>
+          <button class="px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100">
+            <i data-feather="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile: Stacked cards view -->
+    <div class="mobile-cards">
+
+      <div class="stacked-card">
+        <div class="card-header">
+          <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center">
+            <span class="text-primary-600 font-semibold">LP</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-800">Lucas Perez</h3>
+            <span class="badge badge-course">3ro A</span>
+          </div>
+        </div>
+        <div class="card-row">
+          <span class="card-label">DNI</span>
+          <span class="card-value">45.678.901</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Fecha Nac.</span>
+          <span class="card-value">15/03/2015</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Contactos</span>
+          <span class="card-value">2 contactos</span>
+        </div>
+        <div class="card-actions">
+          <button class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 flex items-center justify-center gap-2">
+            <i data-feather="eye" class="w-4 h-4"></i>
+            Ver
+          </button>
+          <button class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 flex items-center justify-center gap-2">
+            <i data-feather="edit-2" class="w-4 h-4"></i>
+            Editar
+          </button>
+          <button class="px-3 py-2 border border-gray-200 rounded-lg text-error-500 hover:bg-error-50 flex items-center justify-center">
+            <i data-feather="trash-2" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="stacked-card">
+        <div class="card-header">
+          <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+            <span class="text-green-600 font-semibold">SP</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-800">Sofia Perez</h3>
+            <span class="badge badge-course">1ro B</span>
+          </div>
+        </div>
+        <div class="card-row">
+          <span class="card-label">DNI</span>
+          <span class="card-value">50.123.456</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Fecha Nac.</span>
+          <span class="card-value">22/07/2018</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Contactos</span>
+          <span class="card-value">1 contacto</span>
+        </div>
+        <div class="card-actions">
+          <button class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 flex items-center justify-center gap-2">
+            <i data-feather="eye" class="w-4 h-4"></i>
+            Ver
+          </button>
+          <button class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 flex items-center justify-center gap-2">
+            <i data-feather="edit-2" class="w-4 h-4"></i>
+            Editar
+          </button>
+          <button class="px-3 py-2 border border-gray-200 rounded-lg text-error-500 hover:bg-error-50 flex items-center justify-center">
+            <i data-feather="trash-2" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="stacked-card">
+        <div class="card-header">
+          <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+            <span class="text-amber-600 font-semibold">MG</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-800">Martin Garcia</h3>
+            <span class="badge badge-course">3ro A</span>
+          </div>
+        </div>
+        <div class="card-row">
+          <span class="card-label">DNI</span>
+          <span class="card-value">48.234.567</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Fecha Nac.</span>
+          <span class="card-value">08/11/2015</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Contactos</span>
+          <span class="card-value">2 contactos</span>
+        </div>
+        <div class="card-actions">
+          <button class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 flex items-center justify-center gap-2">
+            <i data-feather="eye" class="w-4 h-4"></i>
+            Ver
+          </button>
+          <button class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 flex items-center justify-center gap-2">
+            <i data-feather="edit-2" class="w-4 h-4"></i>
+            Editar
+          </button>
+          <button class="px-3 py-2 border border-gray-200 rounded-lg text-error-500 hover:bg-error-50 flex items-center justify-center">
+            <i data-feather="trash-2" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile pagination -->
+      <div class="flex justify-center mt-4 gap-2">
+        <button class="px-4 py-2 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50" disabled>
+          Anterior
+        </button>
+        <span class="px-4 py-2 text-gray-500">1 de 32</span>
+        <button class="px-4 py-2 bg-primary-500 text-white rounded-xl hover:bg-primary-600">
+          Siguiente
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

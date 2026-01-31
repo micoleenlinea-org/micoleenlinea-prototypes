@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Staff - MiColeEnLinea</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: { 50: '#EEF2FF', 100: '#E0E7FF', 500: '#6366F1', 600: '#4F46E5' },
+            gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937' },
+            success: { 50: '#ECFDF5', 500: '#10B981' },
+            warning: { 50: '#FFFBEB', 500: '#F59E0B' },
+          },
+          borderRadius: { 'xl': '16px', '2xl': '20px' },
+          boxShadow: { 'soft': '0 2px 16px rgba(0, 0, 0, 0.06)' },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F9FAFB;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #E5E7EB;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      margin: 2px 12px;
+      border-radius: 10px;
+      color: #6B7280;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-item:hover {
+      background-color: #F9FAFB;
+      color: #374151;
+    }
+
+    .sidebar-item.active {
+      background-color: #EEF2FF;
+      color: #6366F1;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 260px;
+      padding: 24px 32px;
+      max-width: 900px;
+    }
+
+    /* Course card */
+    .course-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .course-card:hover {
+      border-color: #6366F1;
+    }
+
+    .course-card.selected {
+      border-color: #6366F1;
+      background: linear-gradient(to right, #EEF2FF 0%, white 100%);
+    }
+
+    /* Quick action */
+    .quick-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: white;
+      border: 1px solid #E5E7EB;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+
+    .quick-action:hover {
+      border-color: #6366F1;
+      background: #FAFBFF;
+    }
+
+    .quick-action-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-course { background-color: #DBEAFE; color: #1E40AF; }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar (simplified for staff) -->
+  <aside class="sidebar">
+    <!-- Logo -->
+    <div class="px-5 py-6 border-b border-gray-100">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+          <i data-feather="book-open" class="w-5 h-5 text-primary-600"></i>
+        </div>
+        <div>
+          <span class="font-bold text-gray-800">MiColeEnLinea</span>
+          <p class="text-xs text-gray-500">Escuela San Martin</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation (minimal for staff) -->
+    <nav class="flex-1 py-4 overflow-y-auto">
+      <a href="#" class="sidebar-item active">
+        <i data-feather="home" class="w-5 h-5"></i>
+        <span>Mis cursos</span>
+      </a>
+
+      <a href="#" class="sidebar-item">
+        <i data-feather="bell" class="w-5 h-5"></i>
+        <span>Mensajes enviados</span>
+      </a>
+    </nav>
+
+    <!-- User section -->
+    <div class="p-4 border-t border-gray-100">
+      <div class="flex items-center gap-3 p-2">
+        <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
+          <span class="text-green-600 font-semibold text-sm">JL</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-800 truncate">Juan Lopez</p>
+          <p class="text-xs text-gray-500">Profesor</p>
+        </div>
+        <button class="p-1.5 rounded-lg hover:bg-gray-100">
+          <i data-feather="log-out" class="w-4 h-4 text-gray-400"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-800">Hola, Juan</h1>
+      <p class="text-gray-500 mt-1">Estos son tus cursos asignados</p>
+    </header>
+
+    <!-- My Courses -->
+    <section class="mb-8">
+      <h2 class="font-semibold text-gray-800 mb-4">Mis cursos</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="course-card selected">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+              <i data-feather="book" class="w-6 h-6 text-blue-600"></i>
+            </div>
+            <span class="text-xs text-primary-600 font-medium bg-primary-50 px-2 py-1 rounded-lg">Seleccionado</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 text-lg">3ro A - Turno Manana</h3>
+          <p class="text-sm text-gray-500 mt-1">28 alumnos</p>
+          <div class="flex gap-3 mt-4">
+            <button class="flex-1 px-4 py-2.5 bg-primary-500 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors flex items-center justify-center gap-2">
+              <i data-feather="send" class="w-4 h-4"></i>
+              <span>Enviar mensaje</span>
+            </button>
+            <button class="px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center">
+              <i data-feather="users" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+              <i data-feather="book" class="w-6 h-6 text-purple-600"></i>
+            </div>
+          </div>
+          <h3 class="font-semibold text-gray-800 text-lg">2do B - Turno Tarde</h3>
+          <p class="text-sm text-gray-500 mt-1">24 alumnos</p>
+          <div class="flex gap-3 mt-4">
+            <button class="flex-1 px-4 py-2.5 bg-primary-500 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors flex items-center justify-center gap-2">
+              <i data-feather="send" class="w-4 h-4"></i>
+              <span>Enviar mensaje</span>
+            </button>
+            <button class="px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center">
+              <i data-feather="users" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="mb-8">
+      <h2 class="font-semibold text-gray-800 mb-4">Acciones rapidas</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+        <button class="quick-action">
+          <div class="quick-action-icon bg-primary-50">
+            <i data-feather="send" class="w-5 h-5 text-primary-500"></i>
+          </div>
+          <div class="text-left flex-1">
+            <p class="font-medium text-gray-800">Mensaje a 3ro A</p>
+            <p class="text-sm text-gray-500">Enviar a todo el curso</p>
+          </div>
+          <i data-feather="chevron-right" class="w-5 h-5 text-gray-400"></i>
+        </button>
+
+        <button class="quick-action">
+          <div class="quick-action-icon" style="background-color: #D1FAE5;">
+            <i data-feather="send" class="w-5 h-5 text-success-500"></i>
+          </div>
+          <div class="text-left flex-1">
+            <p class="font-medium text-gray-800">Mensaje a 2do B</p>
+            <p class="text-sm text-gray-500">Enviar a todo el curso</p>
+          </div>
+          <i data-feather="chevron-right" class="w-5 h-5 text-gray-400"></i>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- Recent Messages -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold text-gray-800">Mensajes que enviaste</h2>
+        <a href="#" class="text-sm text-primary-600 hover:underline">Ver todos</a>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
+        <div class="divide-y divide-gray-100">
+
+          <div class="p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="badge badge-course">3ro A</span>
+                <span class="text-xs text-gray-400">hace 2 horas</span>
+              </div>
+              <span class="text-xs text-gray-500">28 enviados</span>
+            </div>
+            <h3 class="font-medium text-gray-800">Tarea de matematicas</h3>
+            <p class="text-sm text-gray-500 truncate">Ejercicios 1 al 10 para el lunes...</p>
+          </div>
+
+          <div class="p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="badge badge-course">2do B</span>
+                <span class="text-xs text-gray-400">ayer</span>
+              </div>
+              <span class="text-xs text-gray-500">24 enviados</span>
+            </div>
+            <h3 class="font-medium text-gray-800">Excursion al museo</h3>
+            <p class="text-sm text-gray-500 truncate">Recordatorio de traer la autorizacion firmada...</p>
+          </div>
+
+          <div class="p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="badge badge-course">3ro A</span>
+                <span class="text-xs text-gray-400">hace 3 dias</span>
+              </div>
+              <span class="text-xs text-gray-500">28 enviados</span>
+            </div>
+            <h3 class="font-medium text-gray-800">Material de lectura</h3>
+            <p class="text-sm text-gray-500 truncate">Se adjunta el texto para la proxima clase...</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Info banner -->
+    <div class="mt-8 p-4 bg-primary-50 rounded-2xl border border-primary-100">
+      <div class="flex items-start gap-3">
+        <i data-feather="info" class="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <p class="text-sm text-primary-700">
+            Solo podes enviar mensajes a los cursos que tenes asignados.
+            Si necesitas enviar a otros cursos, contacta al administrador.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>
